@@ -1,36 +1,23 @@
 #!/usr/bin/python3
 """
-This module provides a function for safely adding two integers.
-It validates inputs, handles special float values, and returns an integer.
+This module provides a function that performs the addition of two numbers.
+It ensures that the inputs are either integers or floats and raises an error
+otherwise. The function casts floats to integers before performing addition.
+It returns the computed integer result of adding the two provided values.
 """
 
 
 def add_integer(a, b=98):
     """
-    Add two integers, validating and converting float inputs when needed.
+    Add two integers after validating and casting inputs.
 
-    Returns the integer sum of a and b.
+    This function checks that both arguments are integers or floats,
+    casts floats to integers, and returns their sum.
     """
-    # Validate a
     if not isinstance(a, (int, float)):
         raise TypeError("a must be an integer")
 
-    # Reject NaN
-    if isinstance(a, float) and a != a:
-        raise TypeError("a must be an integer")
-
-    # Reject +/- infinity
-    if a == float('inf') or a == float('-inf'):
-        raise TypeError("a must be an integer")
-
-    # Validate b
     if not isinstance(b, (int, float)):
-        raise TypeError("b must be an integer")
-
-    if isinstance(b, float) and b != b:
-        raise TypeError("b must be an integer")
-
-    if b == float('inf') or b == float('-inf'):
         raise TypeError("b must be an integer")
 
     return int(a) + int(b)
