@@ -1,22 +1,25 @@
 #!/usr/bin/python3
-"""Rectangle class with eval() compatibility."""
+"""
+Defines a Rectangle class.
+"""
 
 
 class Rectangle:
-    """Defines a rectangle with printable and recreatable output."""
+    """Represents a rectangle."""
 
     def __init__(self, width=0, height=0):
+        """Initialize a Rectangle instance."""
         self.width = width
         self.height = height
 
     @property
     def width(self):
-        """Get the width."""
+        """Retrieve the width."""
         return self.__width
 
     @width.setter
     def width(self, value):
-        """Set the width with validation."""
+        """Set the width."""
         if not isinstance(value, int):
             raise TypeError("width must be an integer")
         if value < 0:
@@ -25,12 +28,12 @@ class Rectangle:
 
     @property
     def height(self):
-        """Get the height."""
+        """Retrieve the height."""
         return self.__height
 
     @height.setter
     def height(self, value):
-        """Set the height with validation."""
+        """Set the height."""
         if not isinstance(value, int):
             raise TypeError("height must be an integer")
         if value < 0:
@@ -38,21 +41,21 @@ class Rectangle:
         self.__height = value
 
     def area(self):
-        """Return area."""
-        return self.__width * self.__height
+        """Return the area of the rectangle."""
+        return self.width * self.height
 
     def perimeter(self):
-        """Return perimeter."""
-        if self.__width == 0 or self.__height == 0:
+        """Return the perimeter of the rectangle."""
+        if self.width == 0 or self.height == 0:
             return 0
-        return 2 * (self.__width + self.__height)
+        return 2 * (self.width + self.height)
 
     def __str__(self):
-        """Return string using '#'."""
-        if self.__width == 0 or self.__height == 0:
+        """Return the string representation using #."""
+        if self.width == 0 or self.height == 0:
             return ""
-        return '\n'.join(['#' * self.__width for _ in range(self.__height)])
+        return "\n".join("#" * self.width for _ in range(self.height))
 
     def __repr__(self):
-        """Return string for eval()."""
-        return "Rectangle({}, {})".format(self.__width, self.__height))
+        """Return a string representation to recreate the object."""
+        return "Rectangle({}, {})".format(self.width, self.height)
