@@ -1,61 +1,54 @@
-#!/usr/bin/python3
-"""Simple RESTful API using Flask."""
+#!/usr/bin/env python3
+"""
+Flask-based RESTful API for basic user management.
+"""
 
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-
-# In-memory storage of users
 users = {}
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
-    """Root endpoint returns a welcome message."""
     return "Welcome to the Flask API!"
 
 
-@app.route("/status")
+@app.route("/data", methods=["GET"])
+def data():
+    return jsonify(list(users.keys())), 200
+
+
+@app.route("/status", methods=["GET"])
 def status():
-    """API status check."""
-    return "OK"
+    return "OK", 200
 
 
-@app.route("/data")
-def get_usernames():
-    """Return a list of all usernames."""
-    return jsonify(list(users.keys()))
-
-
-@app.route("/users/<username>")
+@app.route("/users/<username>", methods=["GET"])
 def get_user(username):
-    """Return user data for a given username."""
-    user = users.get(username)
-    if user:
-        return jsonify(user)
+    if username in users:
+        return jsonify(users[username]), 200
     return jsonify({"error": "User not found"}), 404
 
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
-    """Add a new user from JSON payload."""
-    data = request.get_json()
-    if not data or "username" not in data:
+    new_user = request.get_json()
+
+    if not new_user:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    if "username" not in new_user:
         return jsonify({"error": "Username is required"}), 400
 
-    username = data["username"]
-    users[username] = {
-        "username": username,
-        "name": data.get("name"),
-        "age": data.get("age"),
-        "city": data.get("city")
-    }
+    username = new_user["username"]
 
-    return jsonify({
-        "message": "User added",
-        "user": users[username]
-    }), 201
+    if username in users:
+        return jsonify({"error": "Username already exists"}), 409
+
+    users[username] = new_user
+    return jsonify({"message": "User added", "user": new_user}), 201
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000, use_reloader=False)
